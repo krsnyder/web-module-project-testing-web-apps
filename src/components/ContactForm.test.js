@@ -36,14 +36,37 @@ test('renders ONE error message if user enters less then 5 characters into first
 
   await waitFor(() => {
     expect(screen.getAllByTestId('error')).toHaveLength(1)
+  })
 });
 
 test('renders THREE error messages if user enters no values into any fields.', async () => {
-    
+  render(<ContactForm />)
+
+  const button = screen.getByRole("button")
+  userEvent.click(button)
+  
+  await waitFor(() => {
+    expect(screen.getAllByTestId('error')).toHaveLength(3)
+
+  })
 });
 
 test('renders ONE error message if user enters a valid first name and last name but no email.', async () => {
-    
+  render(<ContactForm />)
+
+  const firstNameInput = screen.getByLabelText("First Name*")
+  userEvent.type(firstNameInput, "Nardwuar")
+  
+  const lastNameInput = screen.getByLabelText("Last Name*")
+  userEvent.type(lastNameInput, "Snyder")
+  
+  const button = screen.getByRole("button")
+  userEvent.click(button)
+
+  await waitFor(() => {
+    expect(screen.getAllByTestId('error')).toHaveLength(1)
+
+  })
 });
 
 test('renders "email must be a valid email address" if an invalid email is entered', async () => {
